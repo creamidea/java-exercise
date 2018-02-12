@@ -8,6 +8,7 @@ public class BubbleSort {
     }
 
     public void setOrder(String expectOrder) throws Exception {
+        expectOrder = expectOrder.toUpperCase();
         if (expectOrder == "ASC" || expectOrder == "DESC") {
             order = expectOrder;
         } else {
@@ -24,7 +25,7 @@ public class BubbleSort {
      * @return
      */
     public <T extends Comparable> boolean compare(T a, T b) {
-        return order.toUpperCase() == "DESC"
+        return order == "DESC"
                 ? a.compareTo(b) < 0
                 : a.compareTo(b) > 0;
     }
