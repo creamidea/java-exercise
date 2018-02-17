@@ -7,21 +7,41 @@ import java.util.ArrayList;
  */
 public class App {
     public static void main(String[] args) {
-        App app = new App();
+        BigFile bigFile = new BigFile();
+        String action = args[0];
+        String filename = args[1];
 
-        String target = "Hello;World";
-        char sep = ';';
-        ArrayList<String> result = app.split(target, sep);
-
-        for (String x : result) {
-            System.out.println(x);
+        switch (action) {
+            case "create":
+                bigFile.create(filename, 2 * 1000 * 10000);
+                break;
+            case "sort":
+                bigFile.sort(filename);
+                break;
+            default:
+                System.out.println("Usage: bigfile [create|sort] filename");
+                break;
         }
+//        App app = new App();
+
+//        String target = "Hello;World";
+//        char sep = ';';
+//        ArrayList<String> result = app.split(target, sep);
+//
+//        for (String x : result) {
+//            System.out.println(x);
+//        }
+
+//        String path = FileSystems
+//                .getPath("README.md")
+//                .toAbsolutePath()
+//                .toString();
     }
 
     /**
      * 根据给定的字符分割字符串
      *
-     * @param target 处理字符串
+     * @param target    处理字符串
      * @param separator 分隔符
      * @return
      */
