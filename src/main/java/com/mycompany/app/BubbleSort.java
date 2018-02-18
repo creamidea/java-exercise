@@ -1,5 +1,7 @@
 package com.mycompany.app;
 
+import java.util.LinkedList;
+
 public class BubbleSort {
     private String order = "ASC";
 
@@ -24,7 +26,7 @@ public class BubbleSort {
      * @param <T>
      * @return
      */
-    public <T extends Comparable> boolean compare(T a, T b) {
+    public <T extends Comparable<T>> boolean compare(T a, T b) {
         return order == "DESC"
                 ? a.compareTo(b) < 0
                 : a.compareTo(b) > 0;
@@ -33,18 +35,18 @@ public class BubbleSort {
     /**
      * 冒泡排序算法实现
      *
-     * @param arr
      * @param <T>
+     * @param arr
      * @return
      */
-    public <T extends Comparable> T[] sort(T[] arr) {
-        int len = arr.length;
+    public <T extends Comparable<T>> LinkedList<T> sort(LinkedList<T> arr) {
+        int len = arr.size();
         for (int i = len - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
-                if (compare(arr[j], arr[j + 1])) {
-                    T temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+                if (compare(arr.get(j), arr.get(j + 1))) {
+                    T temp = arr.get(j);
+                    arr.set(j, arr.get(j + 1));
+                    arr.set(j+1, temp);
                 }
             }
         }

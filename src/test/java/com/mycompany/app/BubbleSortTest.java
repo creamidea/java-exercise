@@ -4,6 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.LinkedList;
+
 import static org.junit.Assert.assertArrayEquals;
 
 public class BubbleSortTest extends TestCase {
@@ -25,26 +27,26 @@ public class BubbleSortTest extends TestCase {
 
     public void testSort() throws Exception {
         BubbleSort bs = new BubbleSort();
-        Integer source[] = {3, 2, 5, 6, 3, 10};
-        Integer _source[] = {2, 3, 3, 5, 6, 10};
-        Double source2[] = {2.1, 3.4, 39.0, 89.1, -1.2};
-        Double _source2[] = {-1.2, 2.1, 3.4, 39.0, 89.1};
-
+        LinkedList<Integer> source = new LinkedList(){{
+            add(3);
+            add(2);
+            add(5);
+            add(6);
+            add(3);
+            add(10);
+        }};
+        Integer[] expectSource = {2, 3, 3, 5, 6, 10};
         bs.sort(source);
-        assertArrayEquals(source, _source);
-
-        bs.sort(source2);
-        assertArrayEquals(source2, _source2);
+        assertArrayEquals(source.toArray(), expectSource);
 
         bs.setOrder("DESC");
-        Double __source2[] = {89.1, 39.0, 3.4, 2.1, -1.2};
-        bs.sort(source2);
-        assertArrayEquals(source2, __source2);
-
-        bs.setOrder("ASC");
-        String[] students = {"xiaoming", "cisong", "weiziman"};
-        String[] _students = {"cisong", "weiziman", "xiaoming"};
+        LinkedList<String> students = new LinkedList(){{
+            add("xiaoming");
+            add("cisong");
+            add("weiziman");
+        }};
+        String[] expectStudents = {"xiaoming", "weiziman", "cisong"};
         bs.sort(students);
-        assertArrayEquals(students, _students);
+        assertArrayEquals(students.toArray(), expectStudents);
     }
 }
