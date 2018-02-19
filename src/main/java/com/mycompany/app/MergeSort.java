@@ -1,38 +1,43 @@
 package com.mycompany.app;
 
+import java.util.LinkedList;
+
 public class MergeSort {
-    void merge(int arr[], int first, int mid, int last) {
-        int[] temp = new int[arr.length];
+    <T extends Comparable<T>> void merge(LinkedList<T> arr, int first, int mid, int last) {
+        LinkedList<T> temp = new LinkedList<>();
         int i = first, j = mid + 1;
         int m = mid, n = last;
-        int k = 0;
         while (i <= m && j <= n) {
-            if (arr[i] < arr[j]) {
-                temp[k++] = arr[i++];
+            if (arr.get(i).compareTo(arr.get(j)) >= 1) {
+                temp.add(arr.get(i++));
             } else {
-                temp[k++] = arr[j++];
+                temp.add(arr.get(j++));
             }
         }
 
         while (i <= m) {
-            temp[k++] = arr[i++];
+            temp.add(arr.get(i++));
         }
 
         while (j <= n) {
-            temp[k++] = arr[j++];
+            temp.add(arr.get(j++));
         }
 
-        for (i = 0; i < k; i++) {
-            arr[first + i] = temp[i];
+        for (i = 0; i < temp.size(); i++) {
+            arr.set(first + i, temp.get(i));
         }
     }
 
-    void sort(int[] arr, int first, int last) {
+    <T extends Comparable<T>> void innerSort(LinkedList<T> arr, int first, int last) {
         if (first < last) {
             int mid = (first + last) / 2;
-            sort(arr, first, mid);
-            sort(arr, mid + 1, last);
+            innerSort(arr, first, mid);
+            innerSort(arr, mid + 1, last);
             merge(arr, first, mid, last);
         }
+    }
+
+    <T extends Comparable<T>> void sort(LinkedList<T> arr) {
+        this.innerSort(arr, 0, arr.size() - 1);
     }
 }
