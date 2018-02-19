@@ -1,51 +1,76 @@
 package com.mycompany.app;
 
 import java.io.*;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class BigFile {
     private static String dirname = "data";
 
-    public void create(String filename, int countOfColumn) {
+    /**
+     * 调用创建文件指令
+     * @param filename
+     * @param countOfColumn
+     * @throws IOException
+     */
+    public void create(String filename, int countOfColumn) throws IOException {
         File fd = new File(this.createBigFilePath(filename));
-        try {
-            FileOutputStream stream = new FileOutputStream(fd);
-            BufferedOutputStream buff = new BufferedOutputStream(stream);
-            try {
-                buff.write("id\tname\tscore\n".getBytes());
-                for (int i = 0; i < countOfColumn; i++) {
-                    String content = this.createBigFileContent(i);
-                    buff.write(content.getBytes());
-                }
-                buff.flush();
-                buff.close();
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex);
+        FileOutputStream stream = new FileOutputStream(fd);
+        BufferedOutputStream buff = new BufferedOutputStream(stream);
+//      buff.write("id\tname\tscore\n".getBytes());
+        for (int i = 0; i < countOfColumn; i++) {
+            String content = this.createBigFileContent(i);
+            buff.write(content.getBytes());
         }
+        buff.flush();
+        buff.close();
     }
 
-    public void sort(String filename) {
-        System.out.println(filename);
+    /**
+     * 调用排序指令
+     * @param filename
+     * @throws IOException
+     */
+    public void sort(String filename) throws IOException {
+        LinkedList<Record> records = this.read(filename);
+        this.sortRecords(records);
     }
 
-    private void read(String path) {
-        System.out.println(path);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("README.md"));
-            String sCurrentLine;
-            try {
-                while ((sCurrentLine = br.readLine()) != null) {
-                    System.out.println(sCurrentLine);
-                }
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex);
+    /**
+     * 读取数据
+     * @param filename
+     * @return
+     * @throws IOException
+     */
+    private LinkedList<Record> read(String filename) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("data/" + filename));
+        LinkedList<Record> container = new LinkedList<>();
+        String sCurrentLine;
+        while ((sCurrentLine = br.readLine()) != null) {
+            Record r = new Record();
+            String[] _r = sCurrentLine.split("\t");
+
+            if (_r.length != 3) continue;
+
+            r.setId(Integer.parseInt(_r[0]));
+            r.setName(_r[1]);
+            r.setScroce(Integer.parseInt(_r[2]));
+            container.push(r);
         }
+        return container;
+    }
+
+    /**
+     * 排序
+     * @param records
+     */
+    private void sortRecords (LinkedList<Record> records) {
+//        BubbleSort sorter = new BubbleSort();
+        MergeSort sorter = new MergeSort();
+        long startTime = System.currentTimeMillis();
+        sorter.sort(records);
+        System.out.println(String.format("Duration: %d", System.currentTimeMillis() - startTime));
+//        System.out.println(records);
     }
 
     private String createBigFilePath(String filename) {

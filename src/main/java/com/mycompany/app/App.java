@@ -1,5 +1,6 @@
 package com.mycompany.app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -11,17 +12,22 @@ public class App {
         String action = args[0];
         String filename = args[1];
 
-        switch (action) {
-            case "create":
-                bigFile.create(filename, 2 * 1000 * 10000);
-                break;
-            case "sort":
-                bigFile.sort(filename);
-                break;
-            default:
-                System.out.println("Usage: bigfile [create|sort] filename");
-                break;
+        try {
+            switch (action) {
+                case "create":
+                    bigFile.create(filename, 2 * 1 * 10000);
+                    break;
+                case "sort":
+                    bigFile.sort(filename);
+                    break;
+                default:
+                    System.out.println("Usage: bigfile [create|sort] filename");
+                    break;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
+
 //        App app = new App();
 
 //        String target = "Hello;World";
@@ -46,7 +52,7 @@ public class App {
      * @return
      */
     public ArrayList<String> split(String target, char separator) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         int p = 0;
         int i = 0;
         int max = target.length();
