@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import static org.junit.Assert.assertArrayEquals;
 
-public class MergeSortTest  extends TestCase {
+public class MergeSortTest extends TestCase {
     /**
      * Create the test case
      *
