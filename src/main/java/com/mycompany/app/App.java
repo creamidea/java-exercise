@@ -11,11 +11,12 @@ public class App {
         BigFile bigFile = new BigFile();
         String action = args[0];
         String filename = args[1];
+        long startTime = System.currentTimeMillis();
 
         try {
             switch (action) {
                 case "create":
-                    bigFile.create(filename, 2 * 1 * 10000);
+                    bigFile.create(filename, 2 * 10 * 10000);
                     break;
                 case "sort":
                     bigFile.sort(filename);
@@ -25,8 +26,11 @@ public class App {
                     break;
             }
         } catch (Exception ex) {
-            System.out.println(ex);
+            ex.printStackTrace();
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println(String.format("Duration: %d", endTime - startTime));
 
 //        App app = new App();
 

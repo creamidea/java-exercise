@@ -1,14 +1,17 @@
 package com.mycompany.app;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class BigFile {
     private static String dirname = "data";
+    private static Comparator<Record> nameComparator = Comparator.comparing(Record::getName);
+    private static Comparator<Record> scoreComparator = Comparator.comparing(Record::getScore);
 
     /**
      * 调用创建文件指令
+     *
      * @param filename
      * @param countOfColumn
      * @throws IOException
@@ -18,7 +21,7 @@ public class BigFile {
         FileOutputStream stream = new FileOutputStream(fd);
         BufferedOutputStream buff = new BufferedOutputStream(stream);
 //      buff.write("id\tname\tscore\n".getBytes());
-        for (int i = 0; i < countOfColumn; i++) {
+        for (int i = 1; i <= countOfColumn; i++) {
             String content = this.createBigFileContent(i);
             buff.write(content.getBytes());
         }
@@ -28,23 +31,67 @@ public class BigFile {
 
     /**
      * 调用排序指令
+     *
      * @param filename
      * @throws IOException
      */
-    public void sort(String filename) throws IOException {
-        LinkedList<Record> records = this.read(filename);
-        this.sortRecords(records);
+    public void sort(String filename) throws IOException, ExecutionException, InterruptedException {
+        this.read(filename);
+        List<Record> records = this.read(filename);
+        System.out.println("Reading DONE.");
+//        this.sortRecords(records);
     }
 
     /**
      * 读取数据
+     *
      * @param filename
      * @return
      * @throws IOException
      */
-    private LinkedList<Record> read(String filename) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("data/" + filename));
-        LinkedList<Record> container = new LinkedList<>();
+    private int getLineNumber(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        FileInputStream fileIS = new FileInputStream(filename);
+        int available = fileIS.available();
+
+        LineNumberReader lineNumReader = new LineNumberReader(fileReader);
+        lineNumReader.skip(available);
+        int lineNumber = lineNumReader.getLineNumber();
+        lineNumReader.close();
+
+        return lineNumber;
+    }
+
+    private List<Record> read(String filename) throws IOException {
+        String filepath = String.format("data/%s", filename);
+        FileReader fileReader = new FileReader(filepath);
+        BufferedReader br = new BufferedReader(fileReader);
+        int initLineNumber = 20000;
+        List<Record> container = new ArrayList<>(initLineNumber);
+
+//        FileInputStream fileIS = new FileInputStream(filepath);
+//        int available = fileIS.available();
+//        char[] cbuf = new char[available];
+//        br.read(cbuf);
+//
+//        StringBuilder sb = new StringBuilder();
+//        for (char c : cbuf) {
+//            if (c == '\n') {
+//                Record r = new Record();
+//                String[] _r = sb.toString().split("\t");
+//
+//                if (_r.length != 3) continue;
+//
+//                r.setId(Integer.parseInt(_r[0]));
+//                r.setName(_r[1]);
+//                r.setScore(Integer.parseInt(_r[2]));
+//                container.add(r);
+//                continue;
+//            }
+//
+//            sb.append(c);
+//        }
+
         String sCurrentLine;
         while ((sCurrentLine = br.readLine()) != null) {
             Record r = new Record();
@@ -54,28 +101,34 @@ public class BigFile {
 
             r.setId(Integer.parseInt(_r[0]));
             r.setName(_r[1]);
-            r.setScroce(Integer.parseInt(_r[2]));
-            container.push(r);
+            r.setScore(Integer.parseInt(_r[2]));
+            container.add(r);
         }
+
+        br.close();
         return container;
     }
 
     /**
-     * 排序
-     * @param records
+     * 排序处理
      */
-    private void sortRecords (LinkedList<Record> records) {
-//        BubbleSort sorter = new BubbleSort();
-        MergeSort sorter = new MergeSort();
-        long startTime = System.currentTimeMillis();
-        sorter.sort(records);
-        System.out.println(String.format("Duration: %d", System.currentTimeMillis() - startTime));
-//        System.out.println(records);
+    private void sortRecords(List<Record> records) throws
+            ExecutionException, InterruptedException, FileNotFoundException {
+//        Collections.sort(records, scoreComparator);
+//        PrintWriter out = new PrintWriter(
+//                new FileOutputStream("data/sorted-big-file.txt", false));
+//        for (Record r : records) {
+//            out.println(r);
+//        }
+//        out.flush();
+//        out.close();
+        Assigner assigner = new Assigner();
+        assigner.assign(4, records, scoreComparator);
     }
 
     private String createBigFilePath(String filename) {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.valueOf(BigFile.dirname));
+        sb.append(String.valueOf(dirname));
         sb.append('/');
         sb.append(String.valueOf(filename));
         return sb.toString();

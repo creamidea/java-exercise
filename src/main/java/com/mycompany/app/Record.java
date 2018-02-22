@@ -1,6 +1,6 @@
 package com.mycompany.app;
 
-public class Record implements Comparable<Record> {
+final public class Record implements Comparable<Record> {
     public int getId() {
         return id;
     }
@@ -17,27 +17,24 @@ public class Record implements Comparable<Record> {
         this.name = name;
     }
 
-    public int getScroce() {
-        return scroce;
+    public int getScore() {
+        return score;
     }
 
-    public void setScroce(int scroce) {
-        this.scroce = scroce;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     private int id;
     private String name;
-    private int scroce;
+    private int score;
 
     public String toString() {
-        return String.format("%d\t%s\t%d", this.getId(), this.getName(), this.getScroce());
+        return String.format("%d\t%s\t%d", this.getId(), this.getName(), this.getScore());
     }
 
     @Override
     public int compareTo(Record o) {
-        if (o == null) {
-            return 1;
-        }
-        return this.getScroce() - o.getScroce();
+        return Integer.compare(this.getScore(), o.getScore());
     }
 }
