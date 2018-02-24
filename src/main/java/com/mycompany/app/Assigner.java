@@ -88,7 +88,7 @@ final public class Assigner {
         int size = container.size();
 
         for (int i = 0; i < size; i++) {
-            Runnable assignee = new Assignee(i, container.get(i), comparator);
+            Runnable assignee = new Sorter(i, container.get(i), comparator);
             executor.submit(assignee);
         }
         executor.shutdown();
