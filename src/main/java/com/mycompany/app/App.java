@@ -1,6 +1,5 @@
 package com.mycompany.app;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +15,7 @@ public class App {
         try {
             switch (action) {
                 case "create":
-                    bigFile.create(filename, 2 * 10 * 10000);
+                    bigFile.create(filename, 2 * 1000 * 10000);
                     break;
                 case "sort":
                     bigFile.sort(filename);
