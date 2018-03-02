@@ -29,6 +29,13 @@ final public class Record implements Comparable<Record> {
     private String name;
     private int score;
 
+    public Record(String record) {
+        String[] temp = record.split("\t");
+        setId(Integer.parseInt(temp[0]));
+        setName(temp[1]);
+        setScore(Integer.parseInt(temp[2]));
+    }
+
     public String toString() {
         return String.format("%d\t%s\t%d", this.getId(), this.getName(), this.getScore());
     }

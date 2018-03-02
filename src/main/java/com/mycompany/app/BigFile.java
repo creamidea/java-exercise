@@ -36,10 +36,16 @@ public class BigFile {
      * @throws IOException
      */
     public void sort(String filename) throws IOException, ExecutionException, InterruptedException {
-        this.read(filename);
-        this.read(filename);
+        filename = "big-file.txt";
+        ChunkMergeSort sorter = new ChunkMergeSort(filename);
+        sorter.sort();
+//        Reader reader = new Reader("big-file-2000.txt");
+//        while (true) {
+//            List<String> lines = reader.readNext(2000000);
+//            if (lines.size() == 0) break;
+//        }
 //        List<Record> records = this.read(filename);
-        System.out.println("Reading DONE.");
+//        System.out.println("Reading DONE.");
 //        this.sortRecords(records);
     }
 
@@ -61,54 +67,6 @@ public class BigFile {
         lineNumReader.close();
 
         return lineNumber;
-    }
-
-    private List<String> read(String filename) throws IOException {
-        String filepath = String.format("data/%s", filename);
-        FileReader fileReader = new FileReader(filepath);
-        BufferedReader br = new BufferedReader(fileReader);
-        int initLineNumber = 20000;
-        List<String> container = new ArrayList<>(initLineNumber);
-
-//        FileInputStream fileIS = new FileInputStream(filepath);
-//        int available = fileIS.available();
-//        char[] cbuf = new char[available];
-//        br.read(cbuf);
-//
-//        StringBuilder sb = new StringBuilder();
-//        for (char c : cbuf) {
-//            if (c == '\n') {
-//                Record r = new Record();
-//                String[] _r = sb.toString().split("\t");
-//
-//                if (_r.length != 3) continue;
-//
-//                r.setId(Integer.parseInt(_r[0]));
-//                r.setName(_r[1]);
-//                r.setScore(Integer.parseInt(_r[2]));
-//                container.add(r);
-//                continue;
-//            }
-//
-//            sb.append(c);
-//        }
-
-        String sCurrentLine;
-        while ((sCurrentLine = br.readLine()) != null) {
-//            Record r = new Record();
-//            String[] _r = sCurrentLine.split("\t");
-//
-//            if (_r.length != 3) continue;
-//
-//            r.setId(Integer.parseInt(_r[0]));
-//            r.setName(_r[1]);
-//            r.setScore(Integer.parseInt(_r[2]));
-//            container.add(r);
-            container.add(sCurrentLine);
-        }
-
-        br.close();
-        return container;
     }
 
     /**
